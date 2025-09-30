@@ -13,6 +13,14 @@ return new class extends Migration
     {
         Schema::create('clients', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
+            $table->string('email')->nullable();
+            $table->string('phone_number')->nullable();
+            $table->string('design_choice')->nullable();
+            $table->string('nail_tech_name')->nullable();
+            $table->string('charms')->nullable(); // dropdown selection stored as string
+            $table->string('image')->nullable(); // file path or URL
+            $table->text('notes')->nullable();
             $table->timestamps();
         });
     }
