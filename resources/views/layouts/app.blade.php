@@ -4,7 +4,6 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Fonts -->
@@ -24,7 +23,7 @@
                     <div class="flex items-center space-x-4">
                         <a href="{{ route('dashboard') }}" class="text-gray-800 font-semibold">Dashboard</a>
                         <a href="{{ route('clients.index') }}" class="text-gray-800 font-semibold">Clients</a>
-                        <a href="{{ route('profile.edit') }}" class="text-gray-800 font-semibold">Profile</a>
+                      
                     </div>
 
                     <div class="flex items-center space-x-4">
@@ -69,8 +68,6 @@
         <main class="flex-1 py-6 sm:px-6 lg:px-8">
             {{ $slot }}
         </main>
-
     </div>
 </body>
 </html>
-

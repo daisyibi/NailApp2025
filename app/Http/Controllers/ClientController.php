@@ -8,28 +8,26 @@ use Illuminate\Support\Facades\Storage;
 
 class ClientController extends Controller
 {
-    /**
-     * Display a listing of the clients.
-     */
     public function index()
     {
         $clients = Client::all();
         return view('clients.index', compact('clients'));
     }
 
-    /**
-     * Show the form for creating a new client.
-     */
     public function create()
     {
+        if (auth()->user()->role !== 'admin') {
+            return redirect()->route('clients.index')->with('error', 'Unauthorized access.');
+        }
         return view('clients.create');
     }
 
-    /**
-     * Store a newly created client in storage.
-     */
     public function store(Request $request)
     {
+        if (auth()->user()->role !== 'admin') {
+            return redirect()->route('clients.index')->with('error', 'Unauthorized access.');
+        }
+
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'nullable|email|max:255',
@@ -38,53 +36,38 @@ class ClientController extends Controller
             'nail_tech_name' => 'nullable|string|max:255',
             'charms' => 'nullable|string|max:255',
             'image' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
-            'notes' => 'nullable|string'
+            'notes' => 'nullable|string',
         ]);
 
-        $imagePath = null;
-        if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('images/clients', 'public');
-        }
+        $imagePath = $request->hasFile('image') ? $request->file('image')->store('images/clients', 'public') : null;
 
-        Client::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'phone_number' => $request->phone_number,
-            'design_choice' => $request->design_choice,
-            'nail_tech_name' => $request->nail_tech_name,
-            'charms' => $request->charms,
-            'image' => $imagePath,
-            'notes' => $request->notes,
-            'created_at' => now(),
-            'updated_at' => now()
-        ]);
+        Client::create(array_merge($request->only([
+            'name', 'email', 'phone_number', 'design_choice', 'nail_tech_name', 'charms', 'notes'
+        ]), ['image' => $imagePath]));
 
-        return to_route('clients.index')->with('success', 'Client created successfully.');
+        return redirect()->route('clients.index')->with('success', 'Client created successfully.');
     }
 
-    /**
-     * Display the specified client.
-     */
-    public function show(string $id)
+    public function show(Client $client)
     {
-        $client = Client::findOrFail($id);
+        $client->load('appointments.user'); // eager load appointments and user
         return view('clients.show', compact('client'));
     }
 
-    /**
-     * Show the form for editing the specified client.
-     */
-    public function edit(string $id)
+    public function edit(Client $client)
     {
-        $client = Client::findOrFail($id);
+        if (auth()->user()->role !== 'admin') {
+            return redirect()->route('clients.index')->with('error', 'Unauthorized access.');
+        }
         return view('clients.edit', compact('client'));
     }
 
-    /**
-     * Update the specified client in storage.
-     */
     public function update(Request $request, Client $client)
     {
+        if (auth()->user()->role !== 'admin') {
+            return redirect()->route('clients.index')->with('error', 'Unauthorized access.');
+        }
+
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'nullable|email|max:255',
@@ -93,44 +76,30 @@ class ClientController extends Controller
             'nail_tech_name' => 'nullable|string|max:255',
             'charms' => 'nullable|string|max:255',
             'image' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
-            'notes' => 'nullable|string'
+            'notes' => 'nullable|string',
         ]);
 
         if ($request->hasFile('image')) {
-            // Delete old image if exists
-            if ($client->image) {
-                Storage::disk('public')->delete($client->image);
-            }
+            if ($client->image) Storage::disk('public')->delete($client->image);
             $client->image = $request->file('image')->store('images/clients', 'public');
         }
 
-        $client->update([
-            'name' => $request->name,
-            'email' => $request->email,
-            'phone_number' => $request->phone_number,
-            'design_choice' => $request->design_choice,
-            'nail_tech_name' => $request->nail_tech_name,
-            'charms' => $request->charms,
-            'notes' => $request->notes
-        ]);
+        $client->update($request->only([
+            'name', 'email', 'phone_number', 'design_choice', 'nail_tech_name', 'charms', 'notes'
+        ]));
 
-        return to_route('clients.show', $client)->with('success', 'Client updated successfully.');
+        return redirect()->route('clients.show', $client)->with('success', 'Client updated successfully.');
     }
 
-    /**
-     * Remove the specified client from storage.
-     */
-    public function destroy(string $id)
+    public function destroy(Client $client)
     {
-        $client = Client::findOrFail($id);
-
-        if ($client->image) {
-            Storage::disk('public')->delete($client->image);
+        if (auth()->user()->role !== 'admin') {
+            return redirect()->route('clients.index')->with('error', 'Unauthorized access.');
         }
 
+        if ($client->image) Storage::disk('public')->delete($client->image);
         $client->delete();
-        return to_route('clients.index')->with('success', 'Client successfully removed.');
+
+        return redirect()->route('clients.index')->with('success', 'Client deleted successfully.');
     }
 }
-
-
