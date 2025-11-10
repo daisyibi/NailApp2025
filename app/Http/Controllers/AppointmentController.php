@@ -58,4 +58,45 @@ class AppointmentController extends Controller
         return redirect()->route('clients.show', $client)
                          ->with('success', 'Appointment created successfully.');
     }
+
+    // ✅ Show edit form for appointment
+    public function edit(Appointment $appointment)
+    {
+        if (auth()->user()->role !== 'admin') abort(403);
+
+        $clients = Client::all();
+        return view('appointments.edit', compact('appointment', 'clients'));
+    }
+
+    // ✅ Update appointment
+    public function update(Request $request, Appointment $appointment)
+    {
+        if (auth()->user()->role !== 'admin') abort(403);
+
+        $request->validate([
+            'client_id' => 'required|exists:clients,id',
+            'appointment_date' => 'required|date',
+            'status' => 'required|in:pending,confirmed,completed,cancelled',
+        ]);
+
+        $appointment->update([
+            'client_id' => $request->client_id,
+            'appointment_date' => $request->appointment_date,
+            'status' => $request->status,
+        ]);
+
+        return redirect()->route('appointments.index')
+                         ->with('success', 'Appointment updated successfully.');
+    }
+
+    // ✅ Delete appointment (optional but useful)
+    public function destroy(Appointment $appointment)
+    {
+        if (auth()->user()->role !== 'admin') abort(403);
+
+        $appointment->delete();
+
+        return redirect()->route('appointments.index')
+                         ->with('success', 'Appointment deleted successfully.');
+    }
 }

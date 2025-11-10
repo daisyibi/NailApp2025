@@ -1,9 +1,19 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-2xl text-pink-700 leading-tight tracking-wide">
-            💅 {{ __('Add a New Client') }}
-        </h2>
-        <p class="text-gray-500 text-sm mt-1">Keep your clients’ details organized and beautifully styled.</p>
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+            <div>
+                <h2 class="font-semibold text-2xl text-pink-700 leading-tight tracking-wide">
+                    💅 {{ __('Add a New Client') }}
+                </h2>
+                <p class="text-gray-500 text-sm mt-1">Keep your clients’ details organized and beautifully styled.</p>
+            </div>
+
+            {{-- BACK BUTTON --}}
+            <a href="{{ route('clients.index') }}"
+               class="inline-flex items-center px-4 py-2 bg-gray-100/70 text-gray-700 font-medium rounded-full shadow-md hover:bg-gray-200 transition">
+                ← Back to Clients
+            </a>
+        </div>
     </x-slot>
 
     <div class="py-12 bg-gradient-to-br from-pink-50 via-rose-50 to-purple-50 min-h-screen">
@@ -68,7 +78,6 @@
                                 <option value="Glitter" {{ old('charms') == 'Glitter' ? 'selected' : '' }}>Glitter</option>
                                 <option value="Stickers" {{ old('charms') == 'Stickers' ? 'selected' : '' }}>Stickers</option>
                             </select>
-                            {{-- Preview badge --}}
                             <div id="charms-badge" class="mt-2 inline-block bg-pink-100 text-pink-700 text-xs font-semibold px-3 py-1 rounded-full shadow">
                                 {{ old('charms') ?? 'Classic' }}
                             </div>
@@ -118,5 +127,6 @@
         });
     </script>
 </x-app-layout>
+
 
 
