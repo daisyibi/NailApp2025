@@ -14,7 +14,6 @@ class Client extends Model
         'email',
         'phone_number',
         'design_choice',
-        'nail_tech_name',
         'charms',
         'image',
         'notes',
@@ -25,9 +24,20 @@ class Client extends Model
         'updated_at' => 'datetime',
     ];
 
-    // Client has many appointments
+    /**
+     * Client has many appointments
+     */
     public function appointments()
     {
         return $this->hasMany(Appointment::class);
+    }
+
+    /**
+     * Many-to-Many relationship with NailTech
+     */
+    public function nailTech()
+    {
+        return $this->belongsToMany(NailTech::class, 'client_nail_tech');
+        return $this->belongsToMany(NailTech::class, 'nail_tech_id');
     }
 }

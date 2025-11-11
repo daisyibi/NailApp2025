@@ -6,7 +6,7 @@
                     💖 Nail Studio Dashboard
                 </h2>
                 <p class="text-gray-500 mt-1 text-sm">
-                    Keep track of your clients, appointments, and nail designs in style.
+                    Keep track of your clients, appointments, and nail techs in style.
                 </p>
             </div>
         </div>
@@ -18,7 +18,7 @@
             <!-- Welcome Section -->
             <div class="bg-white/80 backdrop-blur-sm shadow-lg sm:rounded-2xl p-10 border border-pink-100 text-center">
                 <h3 class="text-2xl font-bold text-pink-700">Welcome to Your Nail Studio 💅</h3>
-                <p class="mt-2 text-gray-600">Manage clients, appointments, and showcase your nail art creations elegantly.</p>
+                <p class="mt-2 text-gray-600">Manage clients, appointments, and nail techs elegantly.</p>
             </div>
 
             <!-- Dashboard Cards Grid -->
@@ -62,7 +62,7 @@
                     @endif
                 </div>
 
-                <!-- Nail Design Gallery Card -->
+                <!-- Nail Techs Card -->
                 <div class="bg-white shadow-md hover:shadow-xl transition rounded-2xl p-6 border-t-4 border-rose-400 flex flex-col items-center justify-center space-y-4">
                     <div class="p-4 bg-rose-100 rounded-full shadow-inner">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-rose-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -70,11 +70,12 @@
                                   d="M12 20l9-5-9-5-9 5 9 5zm0 0V10m0 10v-5m0 5l-9-5m9 5l9-5" />
                         </svg>
                     </div>
-                    <h4 class="text-lg font-semibold text-gray-800">Nail Design Gallery</h4>
-                    <p class="text-gray-500 text-sm text-center">Showcase your nail art creations and inspire your clients 💅</p>
-                    <button class="mt-4 inline-flex items-center px-5 py-2 bg-rose-500 text-white font-semibold rounded-md opacity-60 cursor-not-allowed">
-                        Coming Soon
-                    </button>
+                    <h4 class="text-lg font-semibold text-gray-800">Manage Nail Techs</h4>
+                    <p class="text-gray-500 text-sm text-center">Add, view, or update your nail technicians and their specialities.</p>
+                    <a href="{{ route('nailtechs.index') }}"
+                       class="mt-4 inline-flex items-center px-5 py-2 bg-rose-500 text-white font-semibold rounded-md hover:bg-rose-600 transition">
+                        View Nail Techs
+                    </a>
                 </div>
 
             </div>
@@ -87,8 +88,6 @@
         </div>
     </div>
 </x-app-layout>
-
-
 
 
 

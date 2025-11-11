@@ -17,13 +17,18 @@ return new class extends Migration
             $table->foreignId('client_id')->constrained()->onDelete('cascade');
             $table->foreignId('user_id')->constrained()->onDelete('cascade'); // admin who created it
             
-            $table->dateTime('appointment_date');
+            $table->date('appointment_date');      // Date of the appointment
+            $table->time('start_time');            // Start time (matches controller)
+            
             $table->enum('status', ['pending', 'confirmed', 'completed', 'cancelled'])->default('pending');
             
             $table->timestamps();
         });
     }
 
+    /**
+     * Reverse the migrations.
+     */
     public function down(): void
     {
         Schema::dropIfExists('appointments');

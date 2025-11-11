@@ -59,12 +59,17 @@
                                 :value="@old('design_choice')" />
                         </div>
 
-                        {{-- Nail Tech --}}
+                        {{-- Nail Tech Dropdown --}}
                         <div>
                             <label class="block text-sm font-medium text-pink-700 mb-1">Nail Technician</label>
-                            <x-text-input type="text" name="nail_tech_name" field="nail_tech_name" placeholder="e.g. Mia"
-                                class="w-full border-pink-200 rounded-xl focus:border-pink-400 focus:ring-pink-300"
-                                :value="@old('nail_tech_name')" />
+                            <select name="nail_tech_id" class="w-full border border-pink-200 rounded-xl py-2 px-3 focus:border-pink-400 focus:ring-pink-300 transition">
+                                <option value="">-- Select a Nail Technician --</option>
+                                @foreach($nailtechs as $tech)
+                                    <option value="{{ $tech->id }}" {{ old('nail_tech_id') == $tech->id ? 'selected' : '' }}>
+                                        {{ $tech->name }} ({{ $tech->speciality }})
+                                    </option>
+                                @endforeach
+                            </select>
                         </div>
 
                         {{-- Charms / Add-ons --}}
@@ -127,6 +132,4 @@
         });
     </script>
 </x-app-layout>
-
-
 

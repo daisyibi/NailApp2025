@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Client;
+use App\Models\NailTech;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -10,7 +11,7 @@ class ClientController extends Controller
 {
     public function index()
     {
-        $clients = Client::all();
+        $clients = Client::with('nailTech')->get(); // eager load nail tech
         return view('clients.index', compact('clients'));
     }
 
@@ -19,7 +20,9 @@ class ClientController extends Controller
         if (auth()->user()->role !== 'admin') {
             return redirect()->route('clients.index')->with('error', 'Unauthorized access.');
         }
-        return view('clients.create');
+
+        $nailtechs = NailTech::all(); // pass all nail techs to the view
+        return view('clients.create', compact('nailtechs'));
     }
 
     public function store(Request $request)
@@ -28,30 +31,34 @@ class ClientController extends Controller
             return redirect()->route('clients.index')->with('error', 'Unauthorized access.');
         }
 
-        $request->validate([
+        $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'nullable|email|max:255',
             'phone_number' => 'nullable|string|max:20',
             'design_choice' => 'nullable|string|max:255',
-            'nail_tech_name' => 'nullable|string|max:255',
+            'nail_tech_id' => 'nullable|exists:nail_techs,id', // new field
             'charms' => 'nullable|string|max:255',
             'image' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
             'notes' => 'nullable|string',
         ]);
 
-        $imagePath = $request->hasFile('image') ? $request->file('image')->store('images/clients', 'public') : null;
+        // Handle image upload
+        if ($request->hasFile('image')) {
+            $validated['image'] = $request->file('image')->store('images/clients', 'public');
+        }
 
-        Client::create(array_merge($request->only([
-            'name', 'email', 'phone_number', 'design_choice', 'nail_tech_name', 'charms', 'notes'
-        ]), ['image' => $imagePath]));
+        Client::create($validated);
 
         return redirect()->route('clients.index')->with('success', 'Client created successfully.');
     }
 
     public function show(Client $client)
     {
-        $client->load('appointments.user'); // eager load appointments and user
+        $client->load('appointments.user', 'nailTech'); // eager load appointments and nail tech
         return view('clients.show', compact('client'));
+
+          $client->load('nailtech'); // nailtech() relation in Client model
+          return view('clients.show', compact('client'));
     }
 
     public function edit(Client $client)
@@ -59,7 +66,9 @@ class ClientController extends Controller
         if (auth()->user()->role !== 'admin') {
             return redirect()->route('clients.index')->with('error', 'Unauthorized access.');
         }
-        return view('clients.edit', compact('client'));
+
+        $nailtechs = NailTech::all();
+        return view('clients.edit', compact('client', 'nailtechs'));
     }
 
     public function update(Request $request, Client $client)
@@ -68,12 +77,12 @@ class ClientController extends Controller
             return redirect()->route('clients.index')->with('error', 'Unauthorized access.');
         }
 
-        $request->validate([
+        $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'nullable|email|max:255',
             'phone_number' => 'nullable|string|max:20',
             'design_choice' => 'nullable|string|max:255',
-            'nail_tech_name' => 'nullable|string|max:255',
+            'nail_tech_id' => 'nullable|exists:nail_techs,id', // new field
             'charms' => 'nullable|string|max:255',
             'image' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
             'notes' => 'nullable|string',
@@ -81,12 +90,10 @@ class ClientController extends Controller
 
         if ($request->hasFile('image')) {
             if ($client->image) Storage::disk('public')->delete($client->image);
-            $client->image = $request->file('image')->store('images/clients', 'public');
+            $validated['image'] = $request->file('image')->store('images/clients', 'public');
         }
 
-        $client->update($request->only([
-            'name', 'email', 'phone_number', 'design_choice', 'nail_tech_name', 'charms', 'notes'
-        ]));
+        $client->update($validated);
 
         return redirect()->route('clients.show', $client)->with('success', 'Client updated successfully.');
     }
