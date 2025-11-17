@@ -19,15 +19,14 @@
     <div class="py-12 bg-gradient-to-br from-pink-50 via-rose-50 to-purple-50 min-h-screen">
         <div class="max-w-5xl mx-auto sm:px-6 lg:px-8">
             <div class="my-6 p-8 bg-white/90 backdrop-blur-md border border-pink-200 shadow-lg sm:rounded-3xl hover:shadow-2xl transition">
-                
+
                 <h3 class="text-2xl font-bold text-pink-700 mb-6 text-center">💖 Client Information</h3>
 
                 <form action="{{ route('clients.store') }}" method="POST" enctype="multipart/form-data" class="space-y-8">
                     @csrf
 
-                    {{-- Client Info Grid --}}
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        {{-- Name --}}
+                        <!-- Name -->
                         <div>
                             <label class="block text-sm font-medium text-pink-700 mb-1">Client Name</label>
                             <x-text-input type="text" name="name" field="name" placeholder="e.g. Sarah Jones"
@@ -35,7 +34,7 @@
                                 :value="@old('name')" />
                         </div>
 
-                        {{-- Email --}}
+                        <!-- Email -->
                         <div>
                             <label class="block text-sm font-medium text-pink-700 mb-1">Email</label>
                             <x-text-input type="email" name="email" field="email" placeholder="e.g. sarah@example.com"
@@ -43,7 +42,7 @@
                                 :value="@old('email')" />
                         </div>
 
-                        {{-- Phone --}}
+                        <!-- Phone -->
                         <div>
                             <label class="block text-sm font-medium text-pink-700 mb-1">Phone Number</label>
                             <x-text-input type="text" name="phone_number" field="phone_number" placeholder="e.g. +1 234 567 890"
@@ -51,7 +50,7 @@
                                 :value="@old('phone_number')" />
                         </div>
 
-                        {{-- Design Choice --}}
+                        <!-- Design Choice -->
                         <div>
                             <label class="block text-sm font-medium text-pink-700 mb-1">Design Choice</label>
                             <x-text-input type="text" name="design_choice" field="design_choice" placeholder="e.g. French Tips, Chrome, Floral..."
@@ -59,20 +58,21 @@
                                 :value="@old('design_choice')" />
                         </div>
 
-                        {{-- Nail Tech Dropdown --}}
+                        <!-- Nail Techs Multi-select -->
                         <div>
-                            <label class="block text-sm font-medium text-pink-700 mb-1">Nail Technician</label>
-                            <select name="nail_tech_id" class="w-full border border-pink-200 rounded-xl py-2 px-3 focus:border-pink-400 focus:ring-pink-300 transition">
-                                <option value="">-- Select a Nail Technician --</option>
+                            <label class="block text-sm font-medium text-pink-700 mb-1">Nail Technician(s)</label>
+                            <select name="nailtechs[]" multiple
+                                    class="w-full border border-pink-200 rounded-xl py-2 px-3 focus:border-pink-400 focus:ring-pink-300">
                                 @foreach($nailtechs as $tech)
-                                    <option value="{{ $tech->id }}" {{ old('nail_tech_id') == $tech->id ? 'selected' : '' }}>
-                                        {{ $tech->name }} ({{ $tech->speciality }})
+                                    <option value="{{ $tech->id }}" {{ in_array($tech->id, old('nailtechs', [])) ? 'selected' : '' }}>
+                                        {{ $tech->name }}
                                     </option>
                                 @endforeach
                             </select>
+                            <p class="text-xs text-gray-500 mt-1">Hold Ctrl (Cmd on Mac) to select multiple.</p>
                         </div>
 
-                        {{-- Charms / Add-ons --}}
+                        <!-- Charms / Add-ons -->
                         <div>
                             <label class="block text-sm font-medium text-pink-700 mb-1">Charms / Add-ons</label>
                             <select name="charms" id="charms-select"
@@ -89,7 +89,7 @@
                         </div>
                     </div>
 
-                    {{-- Image Upload --}}
+                    <!-- Image Upload -->
                     <div>
                         <label class="block text-sm font-medium text-pink-700 mb-1">Upload Nail Design Image</label>
                         <div class="border-2 border-dashed border-pink-300 rounded-2xl p-6 text-center hover:bg-pink-50 transition cursor-pointer">
@@ -104,14 +104,14 @@
                         </div>
                     </div>
 
-                    {{-- Notes --}}
+                    <!-- Notes -->
                     <div>
                         <label class="block text-sm font-medium text-pink-700 mb-1">Notes</label>
                         <textarea name="notes" rows="4" placeholder="Add any notes about client preferences, allergies, or design ideas..."
                             class="w-full border border-pink-200 rounded-2xl focus:border-pink-400 focus:ring-pink-300 resize-none p-4 text-gray-700">{{ old('notes') }}</textarea>
                     </div>
 
-                    {{-- Submit Button --}}
+                    <!-- Submit Button -->
                     <div class="flex justify-center">
                         <x-primary-button class="mt-4 bg-pink-600 hover:bg-pink-700 text-white px-6 py-3 rounded-2xl shadow-md hover:shadow-lg transition transform hover:scale-105">
                             💖 Save Client
@@ -122,7 +122,6 @@
         </div>
     </div>
 
-    {{-- Charms badge JS --}}
     <script>
         const charmsSelect = document.getElementById('charms-select');
         const charmsBadge = document.getElementById('charms-badge');
@@ -132,4 +131,3 @@
         });
     </script>
 </x-app-layout>
-

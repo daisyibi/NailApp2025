@@ -11,7 +11,7 @@ class ClientController extends Controller
 {
     public function index()
     {
-        $clients = Client::with('nailTech')->get(); // eager load nail tech
+        $clients = Client::with('nailtechs')->get(); // eager load nail techs
         return view('clients.index', compact('clients'));
     }
 
@@ -21,7 +21,7 @@ class ClientController extends Controller
             return redirect()->route('clients.index')->with('error', 'Unauthorized access.');
         }
 
-        $nailtechs = NailTech::all(); // pass all nail techs to the view
+        $nailtechs = NailTech::all(); // for multi-select
         return view('clients.create', compact('nailtechs'));
     }
 
@@ -31,34 +31,38 @@ class ClientController extends Controller
             return redirect()->route('clients.index')->with('error', 'Unauthorized access.');
         }
 
-        $validated = $request->validate([
+        $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'nullable|email|max:255',
             'phone_number' => 'nullable|string|max:20',
             'design_choice' => 'nullable|string|max:255',
-            'nail_tech_id' => 'nullable|exists:nail_techs,id', // new field
             'charms' => 'nullable|string|max:255',
-            'image' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
             'notes' => 'nullable|string',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
+            'nailtechs' => 'nullable|array',
+            'nailtechs.*' => 'exists:nail_techs,id',
         ]);
 
-        // Handle image upload
-        if ($request->hasFile('image')) {
-            $validated['image'] = $request->file('image')->store('images/clients', 'public');
-        }
+        $imagePath = $request->hasFile('image') 
+            ? $request->file('image')->store('images/clients', 'public') 
+            : null;
 
-        Client::create($validated);
+        $client = Client::create(array_merge(
+            $request->only(['name', 'email', 'phone_number', 'design_choice', 'charms', 'notes']),
+            ['image' => $imagePath]
+        ));
+
+        if ($request->has('nailtechs')) {
+            $client->nailtechs()->sync($request->nailtechs);
+        }
 
         return redirect()->route('clients.index')->with('success', 'Client created successfully.');
     }
 
     public function show(Client $client)
     {
-        $client->load('appointments.user', 'nailTech'); // eager load appointments and nail tech
+        $client->load('nailtechs'); // eager load nail techs
         return view('clients.show', compact('client'));
-
-          $client->load('nailtech'); // nailtech() relation in Client model
-          return view('clients.show', compact('client'));
     }
 
     public function edit(Client $client)
@@ -67,7 +71,8 @@ class ClientController extends Controller
             return redirect()->route('clients.index')->with('error', 'Unauthorized access.');
         }
 
-        $nailtechs = NailTech::all();
+        $nailtechs = NailTech::all(); // for multi-select
+        $client->load('nailtechs');
         return view('clients.edit', compact('client', 'nailtechs'));
     }
 
@@ -77,23 +82,26 @@ class ClientController extends Controller
             return redirect()->route('clients.index')->with('error', 'Unauthorized access.');
         }
 
-        $validated = $request->validate([
+        $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'nullable|email|max:255',
             'phone_number' => 'nullable|string|max:20',
             'design_choice' => 'nullable|string|max:255',
-            'nail_tech_id' => 'nullable|exists:nail_techs,id', // new field
             'charms' => 'nullable|string|max:255',
-            'image' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
             'notes' => 'nullable|string',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
+            'nailtechs' => 'nullable|array',
+            'nailtechs.*' => 'exists:nail_techs,id',
         ]);
 
         if ($request->hasFile('image')) {
             if ($client->image) Storage::disk('public')->delete($client->image);
-            $validated['image'] = $request->file('image')->store('images/clients', 'public');
+            $client->image = $request->file('image')->store('images/clients', 'public');
         }
 
-        $client->update($validated);
+        $client->update($request->only(['name', 'email', 'phone_number', 'design_choice', 'charms', 'notes']));
+
+        $client->nailtechs()->sync($request->nailtechs ?? []); // update many-to-many
 
         return redirect()->route('clients.show', $client)->with('success', 'Client updated successfully.');
     }
@@ -105,6 +113,7 @@ class ClientController extends Controller
         }
 
         if ($client->image) Storage::disk('public')->delete($client->image);
+        $client->nailtechs()->detach(); // remove all relationships
         $client->delete();
 
         return redirect()->route('clients.index')->with('success', 'Client deleted successfully.');

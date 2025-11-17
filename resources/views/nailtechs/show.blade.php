@@ -37,14 +37,23 @@
 
                             <!-- Assigned Clients -->
                             <div>
-                                <h4 class="text-2xl font-bold text-rose-800 mb-2">Assigned Clients</h4>
+                                <h4 class="text-2xl font-bold text-rose-800 mb-4">Assigned Clients</h4>
+
                                 @if($nailtech->clients->isEmpty())
                                     <p class="text-gray-500 italic">No clients assigned yet.</p>
                                 @else
-                                    <ul class="space-y-2">
+                                    <ul class="space-y-4">
                                         @foreach($nailtech->clients as $client)
-                                            <li class="px-4 py-2 bg-pink-50 rounded-xl shadow-inner border border-pink-100">
-                                                {{ $client->name }} ({{ $client->email ?? 'No email' }})
+                                            <li class="bg-pink-50 rounded-xl shadow-inner border border-pink-100 p-4 flex flex-col md:flex-row justify-between items-start md:items-center">
+                                                <div>
+                                                    <p class="font-semibold text-gray-800 text-lg">{{ $client->name }}</p>
+                                                    <p class="text-gray-600 text-sm">{{ $client->email ?? 'No email' }}</p>
+                                                    <p class="text-gray-600 text-sm">Design: {{ $client->design_choice ?? '—' }}</p>
+                                                </div>
+                                                <a href="{{ route('clients.show', $client) }}"
+                                                   class="mt-2 md:mt-0 inline-flex px-4 py-2 bg-pink-500 text-white rounded-full shadow hover:bg-pink-600 transition">
+                                                    View Client
+                                                </a>
                                             </li>
                                         @endforeach
                                     </ul>
@@ -66,3 +75,4 @@
         </div>
     </div>
 </x-app-layout>
+

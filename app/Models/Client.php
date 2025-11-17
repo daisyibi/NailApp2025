@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class Client extends Model
 {
@@ -24,20 +25,31 @@ class Client extends Model
         'updated_at' => 'datetime',
     ];
 
-    /**
-     * Client has many appointments
-     */
+    // One client has many appointments
     public function appointments()
     {
         return $this->hasMany(Appointment::class);
     }
 
-    /**
-     * Many-to-Many relationship with NailTech
-     */
-    public function nailTech()
+    // Many-to-many: clients <-> nail techs
+    public function nailTechs()
     {
-        return $this->belongsToMany(NailTech::class, 'client_nail_tech');
-        return $this->belongsToMany(NailTech::class, 'nail_tech_id');
+        return $this->belongsToMany(NailTech::class, 'client_nail_tech')
+                    ->withTimestamps();
+    }
+
+    // Helper to get primary nail tech name (optional)
+    public function primaryNailTechName(): ?string
+    {
+        $first = $this->nailTechs()->first();
+        return $first ? $first->name : null;
+    }
+
+    // Delete image helper
+    public function deleteImage()
+    {
+        if ($this->image && Storage::disk('public')->exists($this->image)) {
+            Storage::disk('public')->delete($this->image);
+        }
     }
 }

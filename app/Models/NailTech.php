@@ -8,13 +8,17 @@ use Illuminate\Database\Eloquent\Model;
 class NailTech extends Model
 {
     use HasFactory;
-     protected $table = 'nail_techs'; 
 
-    protected $fillable = ['name', 'speciality', 'hourly_rate'];
+    protected $fillable = [
+        'name',
+        'speciality',
+        'hourly_rate',
+    ];
 
-    // NailTech has many clients (pivot)
+    // Many-to-many: nail techs <-> clients
     public function clients()
     {
-        return $this->belongsToMany(Client::class, 'client_nail_tech');
+        return $this->belongsToMany(\App\Models\Client::class, 'client_nail_tech')
+                    ->withTimestamps();
     }
 }
