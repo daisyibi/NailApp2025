@@ -16,7 +16,8 @@ class NailTechController extends Controller
 
     public function create()
     {
-        return view('nailtechs.create');
+        $clients = Client::all(); // send all clients to the create view
+        return view('nailtechs.create', compact('clients'));
     }
 
     public function store(Request $request)
@@ -25,9 +26,16 @@ class NailTechController extends Controller
             'name' => 'required|string|max:255',
             'speciality' => 'required|string|max:255',
             'hourly_rate' => 'required|numeric|min:0',
+            'clients' => 'nullable|array',
+            'clients.*' => 'exists:clients,id',
         ]);
 
-        NailTech::create($request->only('name', 'speciality', 'hourly_rate'));
+        $nailtech = NailTech::create($request->only('name', 'speciality', 'hourly_rate'));
+
+        // Attach selected clients
+        if ($request->has('clients')) {
+            $nailtech->clients()->sync($request->clients);
+        }
 
         return redirect()->route('nailtechs.index')->with('success', 'Nail Technician created successfully.');
     }
@@ -40,7 +48,9 @@ class NailTechController extends Controller
 
     public function edit(NailTech $nailtech)
     {
-        return view('nailtechs.edit', compact('nailtech'));
+        $clients = Client::all(); // all clients for multi-select
+        $nailtech->load('clients'); // load assigned clients
+        return view('nailtechs.edit', compact('nailtech', 'clients'));
     }
 
     public function update(Request $request, NailTech $nailtech)
@@ -49,9 +59,14 @@ class NailTechController extends Controller
             'name' => 'required|string|max:255',
             'speciality' => 'required|string|max:255',
             'hourly_rate' => 'required|numeric|min:0',
+            'clients' => 'nullable|array',
+            'clients.*' => 'exists:clients,id',
         ]);
 
         $nailtech->update($request->only('name', 'speciality', 'hourly_rate'));
+
+        // Update client assignments
+        $nailtech->clients()->sync($request->clients ?? []);
 
         return redirect()->route('nailtechs.show', $nailtech)->with('success', 'Nail Technician updated successfully.');
     }
