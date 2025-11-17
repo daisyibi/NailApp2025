@@ -9,16 +9,18 @@ class NailTech extends Model
 {
     use HasFactory;
 
+    // Set correct table name
+    protected $table = 'nail_techs';
+
     protected $fillable = [
         'name',
         'speciality',
         'hourly_rate',
     ];
 
-    // Many-to-many: nail techs <-> clients
+    // Many-to-many: NailTech <-> Client
     public function clients()
     {
-        return $this->belongsToMany(\App\Models\Client::class, 'client_nail_tech')
-                    ->withTimestamps();
+        return $this->belongsToMany(Client::class, 'client_nail_tech')->withTimestamps();
     }
 }

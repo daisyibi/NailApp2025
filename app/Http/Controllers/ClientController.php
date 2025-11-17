@@ -11,7 +11,7 @@ class ClientController extends Controller
 {
     public function index()
     {
-        $clients = Client::with('nailtechs')->get(); // eager load nail techs
+        $clients = Client::with('nailtechs')->get(); 
         return view('clients.index', compact('clients'));
     }
 
