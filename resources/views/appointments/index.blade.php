@@ -20,28 +20,52 @@
 
     <div class="py-16 max-w-7xl mx-auto sm:px-6 lg:px-8">
 
-        {{-- 1. Redesigned Statistics Boxes --}}
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-8 mb-16">
+        {{-- 1. Premium Statistics Boxes --}}
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-16">
             
             {{-- Total Appointments --}}
-            <div class="bg-white border border-pink-200 shadow-2xl shadow-rose-200/50 rounded-3xl p-8 text-center transition duration-300 hover:scale-[1.02] hover:shadow-3xl">
-                <h3 class="text-lg font-bold text-rose-800 uppercase tracking-widest">Total Appointments</h3>
-                <p class="text-6xl font-extrabold text-gray-900 mt-3 font-mono">{{ $appointments->count() }}</p>
+            <div class="bg-white border border-pink-200 shadow-xl rounded-3xl p-5 bg-gradient-to-br from-pink-50 to-white transition duration-300 hover:shadow-2xl hover:border-pink-300">
+                <div class="flex items-center justify-between mb-2">
+                    <h3 class="text-sm font-bold text-rose-800 uppercase tracking-widest flex items-center gap-2">
+                        <svg class="w-5 h-5 text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+                        </svg>
+                        Total Bookings
+                    </h3>
+                </div>
+                <p class="text-4xl font-extrabold text-gray-900 font-mono mt-1">{{ $appointments->count() }}</p>
             </div>
             
-            {{-- CANCELLED Appointments (Updated Logic & Style) --}}
-            <div class="bg-white border border-red-200 shadow-2xl shadow-red-200/50 rounded-3xl p-8 text-center transition duration-300 hover:scale-[1.02] hover:shadow-3xl">
-                <h3 class="text-lg font-bold text-red-700 uppercase tracking-widest">Cancelled</h3>
-                {{-- CRUCIAL LOGIC CHANGE: Filter for 'cancelled' status --}}
-                <p class="text-6xl font-extrabold text-gray-900 mt-3 font-mono">{{ $appointments->where('status', 'cancelled')->count() }}</p>
+            {{-- Confirmed Appointments (ICON CHANGED HERE) --}}
+            <div class="bg-white border border-purple-200 shadow-xl rounded-3xl p-5 bg-gradient-to-br from-purple-50 to-white transition duration-300 hover:shadow-2xl hover:border-purple-300">
+                <div class="flex items-center justify-between mb-2">
+                    <h3 class="text-sm font-bold text-purple-700 uppercase tracking-widest flex items-center gap-2">
+                        {{-- NEW ICON: Calendar with a Star --}}
+                        <svg class="w-5 h-5 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2zM15 19l2 2 4-4"></path>
+                        </svg>
+                        Confirmed
+                    </h3>
+                </div>
+                <p class="text-4xl font-extrabold text-gray-900 font-mono mt-1">{{ $appointments->where('status', 'confirmed')->count() }}</p>
             </div>
             
             {{-- Completed Appointments --}}
-            <div class="bg-white border border-green-200 shadow-2xl shadow-green-200/50 rounded-3xl p-8 text-center transition duration-300 hover:scale-[1.02] hover:shadow-3xl">
-                <h3 class="text-lg font-bold text-green-700 uppercase tracking-widest">Completed</h3>
-                <p class="text-6xl font-extrabold text-gray-900 mt-3 font-mono">{{ $appointments->where('status', 'completed')->count() }}</p>
+            <div class="bg-white border border-green-200 shadow-xl rounded-3xl p-5 bg-gradient-to-br from-green-50 to-white transition duration-300 hover:shadow-2xl hover:border-green-300">
+                <div class="flex items-center justify-between mb-2">
+                    <h3 class="text-sm font-bold text-green-700 uppercase tracking-widest flex items-center gap-2">
+                        <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        Completed
+                    </h3>
+                </div>
+                <p class="text-4xl font-extrabold text-gray-900 font-mono mt-1">{{ $appointments->where('status', 'completed')->count() }}</p>
             </div>
+            
         </div>
+        
+        ---
 
         @if($appointments->isEmpty())
             {{-- Empty State --}}
@@ -49,7 +73,7 @@
                 <p class="text-gray-500 text-center text-2xl italic font-light">No exclusive service appointments recorded at this time. Begin by reserving a booking for a valued client.</p>
             </div>
         @else
-            {{-- 2. Appointment Card Grid Redesign --}}
+            {{-- 2. Appointment Card Grid (Unchanged) --}}
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 @foreach($appointments->sortByDesc('appointment_date') as $appointment)
                     <div class="bg-white border border-rose-100 shadow-2xl shadow-pink-200/50 rounded-3xl p-8 transition duration-300 hover:shadow-3xl hover:border-pink-300 flex flex-col justify-between h-full">
@@ -98,7 +122,7 @@
                                     Edit Details
                                 </a>
                                 <form action="{{ route('appointments.destroy', $appointment) }}" method="POST" 
-                                      onsubmit="return confirm('Confirm deletion of this appointment?');">
+                                        onsubmit="return confirm('Confirm deletion of this appointment?');">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit"
