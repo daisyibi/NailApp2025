@@ -48,8 +48,8 @@ class NailTechController extends Controller
 
     public function edit(NailTech $nailtech)
     {
-        $clients = Client::all(); // all clients for multi-select
-        $nailtech->load('clients'); // load assigned clients
+        $clients = Client::all(); 
+        $nailtech->load('clients'); 
         return view('nailtechs.edit', compact('nailtech', 'clients'));
     }
 
@@ -65,7 +65,6 @@ class NailTechController extends Controller
 
         $nailtech->update($request->only('name', 'speciality', 'hourly_rate'));
 
-        // Update client assignments
         $nailtech->clients()->sync($request->clients ?? []);
 
         return redirect()->route('nailtechs.show', $nailtech)->with('success', 'Nail Technician updated successfully.');
@@ -73,7 +72,7 @@ class NailTechController extends Controller
 
     public function destroy(NailTech $nailtech)
     {
-        $nailtech->clients()->detach(); // remove all client assignments
+        $nailtech->clients()->detach(); 
         $nailtech->delete();
 
         return redirect()->route('nailtechs.index')->with('success', 'Nail Technician deleted successfully.');

@@ -101,7 +101,7 @@ class ClientController extends Controller
 
         $client->update($request->only(['name', 'email', 'phone_number', 'design_choice', 'charms', 'notes']));
 
-        $client->nailtechs()->sync($request->nailtechs ?? []); // update many-to-many
+        $client->nailtechs()->sync($request->nailtechs ?? []); 
 
         return redirect()->route('clients.show', $client)->with('success', 'Client updated successfully.');
     }
@@ -113,8 +113,7 @@ class ClientController extends Controller
         }
 
         if ($client->image) Storage::disk('public')->delete($client->image);
-        $client->nailtechs()->detach(); // remove all relationships
-        $client->delete();
+        $client->nailtechs()->detach(); 
 
         return redirect()->route('clients.index')->with('success', 'Client deleted successfully.');
     }
