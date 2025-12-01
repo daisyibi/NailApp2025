@@ -9,7 +9,7 @@ class NailTech extends Model
 {
     use HasFactory;
 
-    // Set correct table name
+
     protected $table = 'nail_techs';
 
     protected $fillable = [

@@ -8,7 +8,7 @@
                 <p class="text-gray-500 text-sm mt-1">Capture every detail for a flawless, personalized experience.</p>
             </div>
 
-            {{-- BACK BUTTON --}}
+      
             <a href="{{ route('clients.index') }}"
                 class="inline-flex items-center px-5 py-2 bg-pink-100/80 text-pink-700 font-semibold rounded-full shadow-md hover:bg-pink-200 transition duration-300 transform hover:scale-[1.02]">
                 <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
@@ -17,7 +17,7 @@
         </div>
     </x-slot>
 
-    {{-- Enhanced Luxury Background --}}
+
     <div class="py-12 bg-gradient-to-br from-pink-50 via-rose-100 to-purple-100 min-h-screen">
         <div class="max-w-5xl mx-auto sm:px-6 lg:px-8">
             {{-- WOW! Card with Glassmorphism and Shadow --}}
@@ -65,8 +65,7 @@
                             </div>
                         </div>
                     </fieldset>
-                    
-                    {{-- SECTION 2: Appointment/Design Details (Fieldset Group) --}}
+           
                     <fieldset class="border-4 border-pink-200 rounded-3xl p-6 space-y-6">
                         <legend class="text-lg font-semibold text-pink-700 px-3">💅 Design & Preferences</legend>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -113,12 +112,12 @@
                                         </option>
                                     @endforeach
                                 </select>
-                                <p class="text-xs text-gray-500 mt-1">Hold **Ctrl / Cmd** to select multiple technicians.</p>
+                                <p class="text-xs text-gray-500 mt-1">Hold Ctrl / Cmd to select multiple technicians.</p>
                             </div>
                         </div>
                     </fieldset>
                     
-                    {{-- SECTION 3: Notes & Image (Combined for Flow) --}}
+                 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                         
                         <div class="order-2 md:order-1">

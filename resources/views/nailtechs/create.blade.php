@@ -14,7 +14,7 @@
 
     <div class="py-16 bg-gradient-to-br from-white via-pink-50 to-rose-50 min-h-screen">
         <div class="max-w-5xl mx-auto sm:px-6 lg:px-8">
-            {{-- Main Form Card --}}
+          
             <div class="bg-white rounded-3xl border border-pink-100 shadow-3xl shadow-rose-200/50 p-10 md:p-12">
                 
                 <h3 class="text-2xl font-serif italic text-rose-800 mb-6 pb-3 border-b border-pink-100">
@@ -28,7 +28,7 @@
                         @method('PUT')
                     @endif
 
-                    <!-- Basic Information Section -->
+                 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                         
                         <div>
@@ -67,7 +67,7 @@
                         </div>
                     </div>
 
-                    <!-- Submit -->
+            
                     <div class="flex justify-center pt-4">
                         <button type="submit"
                             class="inline-flex items-center px-10 py-3 bg-gradient-to-r from-pink-500 to-rose-700 text-white font-bold rounded-full shadow-xl hover:from-pink-600 hover:to-rose-800 transition duration-300 transform hover:scale-[1.01] tracking-widest text-base uppercase">

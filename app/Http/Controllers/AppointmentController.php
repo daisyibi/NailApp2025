@@ -8,40 +8,41 @@ use Illuminate\Http\Request;
 
 class AppointmentController extends Controller
 {
-    // List all appointments (Admin only)
+    // ----------------------------
+    // USERS + ADMIN: View all appointments
+    // ----------------------------
     public function index()
     {
-        if (auth()->user()->role !== 'admin') abort(403);
+        $appointments = Appointment::with(['client', 'user'])
+                                   ->latest()
+                                   ->get();
 
-        $appointments = Appointment::with(['client', 'user'])->latest()->get();
         return view('appointments.index', compact('appointments'));
     }
 
-    // Show a single appointment (Admin only)
+    // ----------------------------
+    // USERS + ADMIN: View appointment details
+    // ----------------------------
     public function show(Appointment $appointment)
     {
-        if (auth()->user()->role !== 'admin') abort(403);
-
         $appointment->load(['client', 'user']);
+
         return view('appointments.show', compact('appointment'));
     }
 
-    // Show create form for a client (Admin only)
+    // ----------------------------
+    // USERS + ADMIN: Create appointment form
+    // ----------------------------
     public function create(Client $client)
     {
-        if (auth()->user()->role !== 'admin') {
-            return redirect()->route('clients.show', $client)
-                             ->with('error', 'Only admins can create appointments.');
-        }
-
         return view('appointments.create', compact('client'));
     }
 
-    // Store appointment (Admin only)
+    // ----------------------------
+    // USERS + ADMIN: Store new appointment
+    // ----------------------------
     public function store(Request $request, Client $client)
     {
-        if (auth()->user()->role !== 'admin') abort(403);
-
         $request->validate([
             'appointment_date' => 'required|date',
             'start_time' => 'required|date_format:H:i',
@@ -55,23 +56,28 @@ class AppointmentController extends Controller
             'status' => $request->status,
         ]);
 
-        return redirect()->route('clients.show', $client)
-                         ->with('success', 'Appointment created successfully.');
+        return redirect()
+            ->route('clients.show', $client)
+            ->with('success', 'Appointment created successfully.');
     }
 
-    // ✅ Show edit form for appointment
+    // ----------------------------
+    // ADMIN ONLY: Edit
+    // ----------------------------
     public function edit(Appointment $appointment)
     {
-        if (auth()->user()->role !== 'admin') abort(403);
+        if (auth()->user()->role !== 'admin') abort(403, 'Admins only.');
 
         $clients = Client::all();
         return view('appointments.edit', compact('appointment', 'clients'));
     }
 
-    // ✅ Update appointment
+    // ----------------------------
+    // ADMIN ONLY: Update
+    // ----------------------------
     public function update(Request $request, Appointment $appointment)
     {
-        if (auth()->user()->role !== 'admin') abort(403);
+        if (auth()->user()->role !== 'admin') abort(403, 'Admins only.');
 
         $request->validate([
             'client_id' => 'required|exists:clients,id',
@@ -79,24 +85,24 @@ class AppointmentController extends Controller
             'status' => 'required|in:pending,confirmed,completed,cancelled',
         ]);
 
-        $appointment->update([
-            'client_id' => $request->client_id,
-            'appointment_date' => $request->appointment_date,
-            'status' => $request->status,
-        ]);
+        $appointment->update($request->only(['client_id', 'appointment_date', 'status']));
 
-        return redirect()->route('appointments.index')
-                         ->with('success', 'Appointment updated successfully.');
+        return redirect()
+            ->route('appointments.index')
+            ->with('success', 'Appointment updated successfully.');
     }
 
-    // ✅ Delete appointment (optional but useful)
+    // ----------------------------
+    // ADMIN ONLY: Delete
+    // ----------------------------
     public function destroy(Appointment $appointment)
     {
-        if (auth()->user()->role !== 'admin') abort(403);
+        if (auth()->user()->role !== 'admin') abort(403, 'Admins only.');
 
         $appointment->delete();
 
-        return redirect()->route('appointments.index')
-                         ->with('success', 'Appointment deleted successfully.');
+        return redirect()
+            ->route('appointments.index')
+            ->with('success', 'Appointment deleted successfully.');
     }
 }

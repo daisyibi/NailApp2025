@@ -1,11 +1,10 @@
 <x-app-layout>
     <x-slot name="header">
-        {{-- Header: Elegant Serif for Classic Luxury --}}
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <h2 class="font-serif italic text-5xl text-rose-700 leading-tight tracking-wider font-extralight">
                 🗓 Appointment Calendar
             </h2>
-            
+
             <div class="flex gap-4 items-center">
                 <p class="text-gray-500 text-sm italic tracking-wide max-w-md hidden md:block">
                     A curated view of your exclusive client schedule.
@@ -20,14 +19,13 @@
 
     <div class="py-16 max-w-7xl mx-auto sm:px-6 lg:px-8">
 
-        {{-- 1. Premium Statistics Boxes --}}
+        {{-- Statistics Boxes --}}
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-16">
-            
-            {{-- Total Appointments --}}
+
             <div class="bg-white border border-pink-200 shadow-xl rounded-3xl p-5 bg-gradient-to-br from-pink-50 to-white transition duration-300 hover:shadow-2xl hover:border-pink-300">
                 <div class="flex items-center justify-between mb-2">
                     <h3 class="text-sm font-bold text-rose-800 uppercase tracking-widest flex items-center gap-2">
-                        <svg class="w-5 h-5 text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <svg class="w-5 h-5 text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
                         </svg>
                         Total Bookings
@@ -35,13 +33,11 @@
                 </div>
                 <p class="text-4xl font-extrabold text-gray-900 font-mono mt-1">{{ $appointments->count() }}</p>
             </div>
-            
-            {{-- Confirmed Appointments (ICON CHANGED HERE) --}}
+
             <div class="bg-white border border-purple-200 shadow-xl rounded-3xl p-5 bg-gradient-to-br from-purple-50 to-white transition duration-300 hover:shadow-2xl hover:border-purple-300">
                 <div class="flex items-center justify-between mb-2">
                     <h3 class="text-sm font-bold text-purple-700 uppercase tracking-widest flex items-center gap-2">
-                        {{-- NEW ICON: Calendar with a Star --}}
-                        <svg class="w-5 h-5 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <svg class="w-5 h-5 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2zM15 19l2 2 4-4"></path>
                         </svg>
                         Confirmed
@@ -49,12 +45,11 @@
                 </div>
                 <p class="text-4xl font-extrabold text-gray-900 font-mono mt-1">{{ $appointments->where('status', 'confirmed')->count() }}</p>
             </div>
-            
-            {{-- Completed Appointments --}}
+
             <div class="bg-white border border-green-200 shadow-xl rounded-3xl p-5 bg-gradient-to-br from-green-50 to-white transition duration-300 hover:shadow-2xl hover:border-green-300">
                 <div class="flex items-center justify-between mb-2">
                     <h3 class="text-sm font-bold text-green-700 uppercase tracking-widest flex items-center gap-2">
-                        <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                         </svg>
                         Completed
@@ -62,28 +57,27 @@
                 </div>
                 <p class="text-4xl font-extrabold text-gray-900 font-mono mt-1">{{ $appointments->where('status', 'completed')->count() }}</p>
             </div>
-            
-        </div>
-        
-        ---
 
+        </div>
+
+        {{-- Empty State --}}
         @if($appointments->isEmpty())
-            {{-- Empty State --}}
             <div class="bg-white/80 rounded-3xl shadow-xl p-16 mt-10 border border-pink-100">
-                <p class="text-gray-500 text-center text-2xl italic font-light">No exclusive service appointments recorded at this time. Begin by reserving a booking for a valued client.</p>
+                <p class="text-gray-500 text-center text-2xl italic font-light">
+                    No exclusive service appointments recorded at this time. Begin by reserving a booking for a valued client.
+                </p>
             </div>
         @else
-            {{-- 2. Appointment Card Grid (Unchanged) --}}
+            {{-- Appointment Cards --}}
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 @foreach($appointments->sortByDesc('appointment_date') as $appointment)
                     <div class="bg-white border border-rose-100 shadow-2xl shadow-pink-200/50 rounded-3xl p-8 transition duration-300 hover:shadow-3xl hover:border-pink-300 flex flex-col justify-between h-full">
                         
+                        {{-- Client & Status --}}
                         <div class="space-y-4">
-                            {{-- Client Name and Status --}}
                             <div class="flex justify-between items-start border-b border-pink-100 pb-3">
                                 <h4 class="text-3xl font-serif italic text-rose-800 tracking-tight leading-snug">{{ $appointment->client->name }}</h4>
-                                
-                                {{-- Status Badge --}}
+
                                 <span class="px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest shadow-inner flex-shrink-0
                                     @if($appointment->status === 'pending') bg-pink-100 text-pink-700
                                     @elseif($appointment->status === 'confirmed') bg-purple-100 text-purple-700
@@ -93,16 +87,20 @@
                                     {{ ucfirst($appointment->status) }}
                                 </span>
                             </div>
-                            
-                            {{-- Date/Time Details --}}
+
+                            {{-- Date/Time --}}
                             <div class="text-sm space-y-2 pt-2 text-gray-600">
                                 <p class="flex items-center gap-2">
-                                    <svg class="w-4 h-4 text-rose-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path></svg>
+                                    <svg class="w-4 h-4 text-rose-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path>
+                                    </svg>
                                     <span class="font-medium text-gray-700">Date:</span> 
                                     {{ \Carbon\Carbon::parse($appointment->appointment_date)->format('F d, Y') }}
                                 </p>
                                 <p class="flex items-center gap-2">
-                                    <svg class="w-4 h-4 text-rose-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l3 3a1 1 0 001.414-1.414L10 9.586V6z" clip-rule="evenodd"></path></svg>
+                                    <svg class="w-4 h-4 text-rose-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l3 3a1 1 0 001.414-1.414L10 9.586V6z" clip-rule="evenodd"></path>
+                                    </svg>
                                     <span class="font-medium text-gray-700">Time:</span> 
                                     {{ \Carbon\Carbon::parse($appointment->start_time)->format('h:i A') }}
                                 </p>
@@ -113,8 +111,8 @@
                                 Service Coordinator: <span class="font-semibold text-gray-700">{{ $appointment->user->name ?? 'N/A' }}</span>
                             </p>
                         </div>
-                        
-                        {{-- Actions --}}
+
+                        {{-- Admin Actions --}}
                         @if(auth()->user()->role === 'admin')
                             <div class="flex justify-end gap-3 pt-6 border-t border-pink-100 mt-4">
                                 <a href="{{ route('appointments.edit', $appointment) }}"
@@ -122,7 +120,7 @@
                                     Edit Details
                                 </a>
                                 <form action="{{ route('appointments.destroy', $appointment) }}" method="POST" 
-                                        onsubmit="return confirm('Confirm deletion of this appointment?');">
+                                      onsubmit="return confirm('Confirm deletion of this appointment?');">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit"

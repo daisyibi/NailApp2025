@@ -17,7 +17,7 @@
                     @csrf
                     @method('PUT')
 
-                    {{-- 1. Personal & Specialization Info Group --}}
+                  
                     <div class="border border-pink-100 p-6 rounded-2xl bg-pink-50/50">
                         <h3 class="text-xl font-bold text-rose-700 mb-5 border-b border-pink-200 pb-3 flex items-center gap-2">
                             <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg>
@@ -43,7 +43,7 @@
                         </div>
                     </div>
 
-                    {{-- 2. Financial Info Group --}}
+                   
                     <div class="border border-pink-100 p-6 rounded-2xl bg-pink-50/50">
                         <h3 class="text-xl font-bold text-rose-700 mb-5 border-b border-pink-200 pb-3 flex items-center gap-2">
                              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M8.433 7.418c.155-.162.297-.34.426-.534.202-.296.39-.623.535-.976.242-.64.29-1.328.232-2.023A2.962 2.962 0 0010 2a8 8 0 11-9.985 8.995A2.962 2.962 0 008.433 7.418zM14 10a4 4 0 10-8 0 4 4 0 008 0z"></path></svg>
@@ -61,7 +61,6 @@
                         </div>
                     </div>
 
-                    {{-- 3. Multi-select Clients Group --}}
                     <div class="border border-pink-100 p-6 rounded-2xl bg-pink-50/50">
                         <h3 class="text-xl font-bold text-rose-700 mb-5 border-b border-pink-200 pb-3 flex items-center gap-2">
                              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM10 9a4 4 0 00-4 4v2h8v-2a4 4 0 00-4-4z"></path></svg>
@@ -83,10 +82,10 @@
                         </div>
                     </div>
 
-                    {{-- 4. Action Buttons --}}
+                    
                     <div class="flex justify-end gap-4 pt-4 border-t border-pink-100">
                         
-                        {{-- Back/Cancel Link --}}
+                 
                         <a href="{{ route('nailtechs.index') }}" 
                            class="inline-flex items-center px-6 py-3 border border-gray-300 text-gray-700 font-semibold rounded-full bg-white hover:bg-gray-100 transition duration-150 shadow-sm text-sm">
                             Cancel

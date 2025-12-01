@@ -17,9 +17,9 @@ class Appointment extends Model
         'status',
     ];
 
-    // Automatically cast dates to Carbon objects
+
     protected $casts = [
-        'appointment_date' => 'datetime', // <-- This is the key
+        'appointment_date' => 'datetime', //  This is the key
         'start_time' => 'datetime:H:i',   // Optional: cast start_time to Carbon with time format
     ];
 

@@ -33,7 +33,7 @@
                                 
                                 <div class="flex flex-col sm:flex-row"> 
                                     
-                                    {{-- IMAGE SECTION --}}
+                                  
                                     <div class="relative w-full sm:w-1/2 aspect-[4/3] flex-shrink-0 border-r-4 border-pink-100/70 overflow-hidden bg-pink-50"> 
                                         
                                         @if($client->image)
@@ -41,7 +41,7 @@
                                                 alt="{{ $client->name }}'s Nail Design"
                                                 class="w-full h-full object-contain p-4 transition-transform group-hover:scale-[1.05] duration-300">
                                         @else
-                                            {{-- Placeholder --}}
+                                       
                                             <div class="w-full h-full flex items-center justify-center bg-pink-100/60">
                                                 <svg class="w-20 h-20 text-pink-400 opacity-70" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                     <path d="M19.46 15.68L16.2 12.42C15.86 12.08 15.3 12.08 14.96 12.42L12.3 15.08C11.96 15.42 11.4 15.42 11.06 15.08L8.24 12.26C7.9 11.92 7.34 11.92 7 12.26L4.7 14.56C4.4 14.86 4 15 3.5 15C3.3 15 3 14.9 3 14.6V5.4C3 5.1 3.2 5 3.5 5H20.5C20.8 5 21 5.2 21 5.4V18.6C21 18.9 20.8 19 20.5 19H5.5C5.1 19 4.7 18.8 4.4 18.5L7 15.9C7.3 15.6 7.8 15.6 8.1 15.9L11 18.8C11.3 19.1 11.8 19.1 12.1 18.8L14.7 16.2C15 15.9 15.5 15.9 15.8 16.2L18.4 18.8C18.7 19.1 19.2 19.1 19.5 18.8L21.5 16.8V17.6C21.5 17.9 21.3 18 21 18H5V6H21V15.68ZM15.5 10C16.3284 10 17 9.32843 17 8.5C17 7.67157 16.3284 7 15.5 7C14.6716 7 14 7.67157 14 8.5C14 9.32843 14.6716 10 15.5 10Z" fill="currentColor"/>
@@ -49,7 +49,7 @@
                                             </div>
                                         @endif
                                         
-                                        {{-- Charms/Add-ons Badge --}}
+                                 
                                         @if($client->charms)
                                             <div class="absolute top-3 left-3 flex flex-wrap gap-1 z-10">
                                                 <span class="px-3 py-1 bg-pink-50/90 backdrop-blur-sm text-pink-800 text-xs rounded-full font-medium border border-pink-300 shadow-md">
@@ -59,16 +59,15 @@
                                         @endif
                                     </div>
 
-                                    {{-- DETAILS SECTION --}}
                                     <div class="p-6 flex-grow flex flex-col justify-between w-full sm:w-1/2">
                                         <div>
-                                            {{-- Client Name --}}
+                                      
                                             <div class="flex items-center mb-3 border-b border-pink-100 pb-2">
                                                 <svg class="w-5 h-5 text-pink-600 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg>
                                                 <h3 class="text-2xl font-bold text-pink-800 leading-tight font-serif">{{ $client->name }}</h3>
                                             </div>
                                             
-                                            {{-- Design Choice (Simplified - no padding/bg) --}}
+                       
                                             <div class="flex items-center text-gray-700 text-sm font-medium mt-3">
                                                 <svg class="w-4 h-4 text-pink-600 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M12.586 4.343a2 2 0 012.828 0l3.121 3.121a2 2 0 010 2.828l-8.485 8.485a2 2 0 01-2.828 0l-3.121-3.121a2 2 0 010-2.828l8.485-8.485z"></path></svg>
                                                 <span class="font-bold text-rose-700">Design Focus:</span> 
@@ -76,7 +75,6 @@
                                             </div>
                                         </div>
 
-                                        {{-- Contact & Tech Info (Iconography) --}}
                                         <div class="mt-4 border-t border-pink-100 pt-3 space-y-2 text-sm text-gray-700">
                                             
                                             <div class="flex items-center">
@@ -103,7 +101,7 @@
                                             @endif
                                         </div>
 
-                                        {{-- Action Buttons --}}
+                                      
                                         <div class="mt-6 flex items-center gap-2 justify-end pt-3 border-t border-pink-100">
                                             
                                             <a href="{{ route('clients.show', $client) }}" class="px-3 py-1 bg-pink-100/70 text-pink-700 rounded-full text-xs font-medium hover:bg-pink-200 transition">

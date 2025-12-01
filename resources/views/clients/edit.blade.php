@@ -18,7 +18,7 @@
                     @method('PUT')
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <!-- Client Name -->
+                       
                         <div>
                             <label class="block text-sm font-medium text-pink-700 mb-1">Client Name</label>
                             <x-text-input type="text" name="name" field="name" placeholder="e.g. Sarah Jones"
@@ -26,7 +26,7 @@
                                 :value="$client->name" />
                         </div>
 
-                        <!-- Email -->
+                      
                         <div>
                             <label class="block text-sm font-medium text-pink-700 mb-1">Email</label>
                             <x-text-input type="email" name="email" field="email" placeholder="e.g. sarah@example.com"
@@ -34,7 +34,6 @@
                                 :value="$client->email" />
                         </div>
 
-                        <!-- Phone Number -->
                         <div>
                             <label class="block text-sm font-medium text-pink-700 mb-1">Phone Number</label>
                             <x-text-input type="text" name="phone_number" field="phone_number" placeholder="e.g. +1 234 567 890"
@@ -42,7 +41,7 @@
                                 :value="$client->phone_number" />
                         </div>
 
-                        <!-- Design Choice -->
+                      
                         <div>
                             <label class="block text-sm font-medium text-pink-700 mb-1">Design Choice</label>
                             <x-text-input type="text" name="design_choice" field="design_choice"
@@ -50,7 +49,6 @@
                                 :value="$client->design_choice" />
                         </div>
 
-                        <!-- Nail Techs Multi-select -->
                         <div>
                             <label class="block text-sm font-medium text-pink-700 mb-1">Nail Technician(s)</label>
                             <select name="nailtechs[]" multiple
@@ -64,7 +62,7 @@
                             <p class="text-xs text-gray-500 mt-1">Hold Ctrl (Cmd on Mac) to select multiple.</p>
                         </div>
 
-                        <!-- Charms / Add-ons -->
+                     
                         <div>
                             <label class="block text-sm font-medium text-pink-700 mb-1">Charms / Add-ons</label>
                             <select name="charms" class="w-full border border-pink-200 rounded-xl py-2 px-3 focus:border-pink-400 focus:ring-pink-300">
@@ -77,7 +75,7 @@
                         </div>
                     </div>
 
-                    <!-- Image Upload -->
+                    
                     <div class="mt-6">
                         <label class="block text-sm font-medium text-pink-700 mb-1">Update Image</label>
                         <div class="border-2 border-dashed border-pink-300 rounded-xl p-4 text-center hover:bg-pink-50 transition">
@@ -101,14 +99,13 @@
                         @endif
                     </div>
 
-                    <!-- Notes -->
+               
                     <div>
                         <label class="block text-sm font-medium text-pink-700 mb-1">Notes</label>
                         <textarea name="notes" rows="4" placeholder="Update any preferences, allergies, or client feedback..."
                             class="w-full border border-pink-200 rounded-xl focus:border-pink-400 focus:ring-pink-300 resize-none p-3 text-gray-700">{{ $client->notes }}</textarea>
                     </div>
 
-                    <!-- Submit Button -->
                     <div class="flex justify-center">
                         <x-primary-button class="mt-6 bg-pink-600 hover:bg-pink-700 text-white px-6 py-3 rounded-2xl shadow-md hover:shadow-lg transition">
                             💅 Update Client
