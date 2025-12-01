@@ -21,8 +21,7 @@ Route::get('/dashboard', function () {
 
 Route::middleware('auth')->group(function () {
 
-    // Profile routes etc (keep your auth.php included elsewhere)
-    // Clients CRUD + client-specific appointments
+   
     Route::prefix('clients')->name('clients.')->group(function () {
         Route::get('/', [ClientController::class, 'index'])->name('index');
         Route::get('/create', [ClientController::class, 'create'])->name('create');
@@ -38,11 +37,11 @@ Route::middleware('auth')->group(function () {
             ->name('appointments.store');
     });
 
-    // Appointments (admin-managed) - left as you had it
+ 
     Route::resource('appointments', AppointmentController::class)
          ->only(['index', 'show', 'edit', 'update', 'destroy']);
 
-    // Nail tech CRUD
+   
     Route::prefix('nailtechs')->name('nailtechs.')->group(function () {
         Route::get('/', [NailTechController::class, 'index'])->name('index');
         Route::get('/create', [NailTechController::class, 'create'])->name('create');

@@ -18,7 +18,7 @@
                 </a>
 
                 {{-- EDIT BUTTON — ADMIN ONLY --}}
-                @if(auth()->user()->is_admin)
+                @if(auth()->user()->role === 'admin')
                     <a href="{{ route('clients.edit', $client) }}"
                         class="inline-flex items-center px-6 py-2 bg-gradient-to-r from-pink-400 to-rose-500 text-white font-semibold rounded-full shadow-lg hover:from-pink-500 hover:to-rose-600 transition duration-300 transform hover:scale-[1.02] border border-transparent tracking-wide text-sm">
                         EDIT PROFILE
@@ -35,7 +35,6 @@
 
                 {{-- IMAGE + DETAILS --}}
                 <div class="flex flex-col lg:flex-row gap-16 items-center lg:items-start">
-
                     {{-- Image --}}
                     <div class="lg:w-1/2">
                         <h4 class="font-serif italic text-2xl text-rose-700 mb-6 border-b border-pink-200 pb-3 font-semibold tracking-normal">
@@ -87,26 +86,22 @@
                     </div>
                 </div>
 
-
                 {{-- Appointment Log --}}
                 <hr class="border-pink-200">
 
                 <div class="pt-8">
-
                     <div class="flex justify-between mb-8">
-
                         <h4 class="font-serif italic text-3xl text-rose-800 font-bold tracking-tight">
                             🗓 Exclusive Appointment Log
                         </h4>
 
                         {{-- ADMIN ONLY — ADD APPOINTMENT --}}
-                        @if(auth()->user()->is_admin)
+                        @if(auth()->user()->role === 'admin')
                             <a href="{{ route('clients.appointments.create', $client) }}"
                                 class="px-8 py-3 bg-gradient-to-r from-pink-500 to-rose-600 text-white font-bold rounded-full shadow-lg">
                                 + RESERVE APPOINTMENT
                             </a>
                         @endif
-
                     </div>
 
                     @if($client->appointments->isEmpty())
@@ -115,12 +110,10 @@
                         </div>
                     @else
                         <ul class="space-y-6">
-
                             @foreach($client->appointments as $appointment)
+                                <li class="p-8 bg-white border border-rose-200 rounded-3xl shadow-xl flex justify-between flex-col md:flex-row items-start md:items-center">
 
-                                <li class="p-8 bg-white border border-rose-200 rounded-3xl shadow-xl flex justify-between">
-
-                                    <div>
+                                    <div class="mb-4 md:mb-0">
                                         <p class="text-2xl font-extrabold text-rose-800">
                                             {{ $appointment->service ?? 'STANDARD BOOKING' }}
                                         </p>
@@ -137,17 +130,19 @@
                                     </div>
 
                                     {{-- ADMIN ONLY — EDIT/DELETE --}}
-                                    @if(auth()->user()->is_admin)
+                                    @if(auth()->user()->role === 'admin')
                                         <div class="flex gap-4">
                                             <a href="{{ route('appointments.edit', $appointment) }}"
-                                                class="px-6 py-2 bg-pink-100 text-pink-700 rounded-full">
+                                                class="px-6 py-2 rounded-full bg-pink-500 text-white hover:bg-pink-600 transition">
                                                 MODIFY
                                             </a>
 
-                                            <form action="{{ route('appointments.destroy', $appointment) }}" method="POST">
+                                            <form action="{{ route('appointments.destroy', $appointment) }}" method="POST"
+                                                  onsubmit="return confirm('Are you sure you want to cancel this appointment?');">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button class="px-6 py-2 bg-red-600 text-white rounded-full">
+                                                <button type="submit"
+                                                        class="px-6 py-2 rounded-full bg-red-600 text-white hover:bg-red-700 transition">
                                                     CANCEL
                                                 </button>
                                             </form>
@@ -155,26 +150,23 @@
                                     @endif
 
                                 </li>
-
                             @endforeach
                         </ul>
                     @endif
                 </div>
 
-
                 {{-- Notes --}}
                 @if($client->notes)
-                <div class="pt-8">
-                    <h4 class="font-serif italic text-3xl text-rose-800 mb-6">
-                        📝 Personalized Client Notes
-                    </h4>
-                    <p class="text-gray-700 bg-pink-50 p-8 rounded-3xl">{{ $client->notes }}</p>
-                </div>
+                    <div class="pt-8">
+                        <h4 class="font-serif italic text-3xl text-rose-800 mb-6">
+                            📝 Personalized Client Notes
+                        </h4>
+                        <p class="text-gray-700 bg-pink-50 p-8 rounded-3xl">{{ $client->notes }}</p>
+                    </div>
                 @endif
 
-
                 {{-- ARCHIVE CLIENT — ADMIN ONLY --}}
-                @if(auth()->user()->is_admin)
+                @if(auth()->user()->role === 'admin')
                     <div class="mt-16 flex justify-center">
                         <form action="{{ route('clients.destroy', $client) }}" method="POST">
                             @csrf

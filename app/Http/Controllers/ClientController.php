@@ -9,28 +9,30 @@ use Illuminate\Support\Facades\Storage;
 
 class ClientController extends Controller
 {
+    
     public function index()
     {
-        $clients = Client::with('nailtechs')->get(); 
+        $clients = Client::with('nailtechs')->get();
         return view('clients.index', compact('clients'));
     }
 
+  
+    public function show(Client $client)
+    {
+        $client->load('nailtechs');
+        return view('clients.show', compact('client'));
+    }
+
+   
     public function create()
     {
-        if (auth()->user()->role !== 'admin') {
-            return redirect()->route('clients.index')->with('error', 'Unauthorized access.');
-        }
-
-        $nailtechs = NailTech::all(); 
+        $nailtechs = NailTech::all();
         return view('clients.create', compact('nailtechs'));
     }
 
+
     public function store(Request $request)
     {
-        if (auth()->user()->role !== 'admin') {
-            return redirect()->route('clients.index')->with('error', 'Unauthorized access.');
-        }
-
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'nullable|email|max:255',
@@ -52,36 +54,21 @@ class ClientController extends Controller
             ['image' => $imagePath]
         ));
 
-        if ($request->has('nailtechs')) {
-            $client->nailtechs()->sync($request->nailtechs);
-        }
+        $client->nailtechs()->sync($request->nailtechs ?? []);
 
         return redirect()->route('clients.index')->with('success', 'Client created successfully.');
     }
 
-    public function show(Client $client)
-    {
-        $client->load('nailtechs'); 
-        return view('clients.show', compact('client'));
-    }
-
+   
     public function edit(Client $client)
     {
-        if (auth()->user()->role !== 'admin') {
-            return redirect()->route('clients.index')->with('error', 'Unauthorized access.');
-        }
-
-        $nailtechs = NailTech::all(); 
+        $nailtechs = NailTech::all();
         $client->load('nailtechs');
         return view('clients.edit', compact('client', 'nailtechs'));
     }
 
     public function update(Request $request, Client $client)
     {
-        if (auth()->user()->role !== 'admin') {
-            return redirect()->route('clients.index')->with('error', 'Unauthorized access.');
-        }
-
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'nullable|email|max:255',
@@ -100,20 +87,17 @@ class ClientController extends Controller
         }
 
         $client->update($request->only(['name', 'email', 'phone_number', 'design_choice', 'charms', 'notes']));
-
-        $client->nailtechs()->sync($request->nailtechs ?? []); 
+        $client->nailtechs()->sync($request->nailtechs ?? []);
 
         return redirect()->route('clients.show', $client)->with('success', 'Client updated successfully.');
     }
 
+ 
     public function destroy(Client $client)
     {
-        if (auth()->user()->role !== 'admin') {
-            return redirect()->route('clients.index')->with('error', 'Unauthorized access.');
-        }
-
         if ($client->image) Storage::disk('public')->delete($client->image);
-        $client->nailtechs()->detach(); 
+        $client->nailtechs()->detach();
+        $client->delete();
 
         return redirect()->route('clients.index')->with('success', 'Client deleted successfully.');
     }

@@ -8,9 +8,7 @@ use Illuminate\Http\Request;
 
 class AppointmentController extends Controller
 {
-    // ----------------------------
-    // USERS + ADMIN: View all appointments
-    // ----------------------------
+   
     public function index()
     {
         $appointments = Appointment::with(['client', 'user'])
@@ -20,9 +18,7 @@ class AppointmentController extends Controller
         return view('appointments.index', compact('appointments'));
     }
 
-    // ----------------------------
-    // USERS + ADMIN: View appointment details
-    // ----------------------------
+   
     public function show(Appointment $appointment)
     {
         $appointment->load(['client', 'user']);
@@ -30,17 +26,11 @@ class AppointmentController extends Controller
         return view('appointments.show', compact('appointment'));
     }
 
-    // ----------------------------
-    // USERS + ADMIN: Create appointment form
-    // ----------------------------
     public function create(Client $client)
     {
         return view('appointments.create', compact('client'));
     }
 
-    // ----------------------------
-    // USERS + ADMIN: Store new appointment
-    // ----------------------------
     public function store(Request $request, Client $client)
     {
         $request->validate([
@@ -61,9 +51,7 @@ class AppointmentController extends Controller
             ->with('success', 'Appointment created successfully.');
     }
 
-    // ----------------------------
-    // ADMIN ONLY: Edit
-    // ----------------------------
+ 
     public function edit(Appointment $appointment)
     {
         if (auth()->user()->role !== 'admin') abort(403, 'Admins only.');
@@ -72,9 +60,7 @@ class AppointmentController extends Controller
         return view('appointments.edit', compact('appointment', 'clients'));
     }
 
-    // ----------------------------
-    // ADMIN ONLY: Update
-    // ----------------------------
+  
     public function update(Request $request, Appointment $appointment)
     {
         if (auth()->user()->role !== 'admin') abort(403, 'Admins only.');
@@ -92,9 +78,7 @@ class AppointmentController extends Controller
             ->with('success', 'Appointment updated successfully.');
     }
 
-    // ----------------------------
-    // ADMIN ONLY: Delete
-    // ----------------------------
+  
     public function destroy(Appointment $appointment)
     {
         if (auth()->user()->role !== 'admin') abort(403, 'Admins only.');

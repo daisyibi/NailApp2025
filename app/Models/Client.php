@@ -25,35 +25,27 @@ class Client extends Model
         'updated_at' => 'datetime',
     ];
 
-    /**
-     * One client has many appointments
-     */
+    
     public function appointments()
     {
         return $this->hasMany(Appointment::class);
     }
 
-    /**
-     * Many-to-many relationship: clients <-> nail techs
-     */
+    
     public function nailTechs()
     {
         return $this->belongsToMany(NailTech::class, 'client_nail_tech')
                     ->withTimestamps();
     }
 
-    /**
-     * Get primary nail tech name (first assigned tech)
-     */
+    
     public function primaryNailTechName(): ?string
     {
         $first = $this->nailTechs()->first();
         return $first ? $first->name : null;
     }
 
-    /**
-     * Delete client image from storage
-     */
+    
     public function deleteImage()
     {
         if ($this->image && Storage::disk('public')->exists($this->image)) {
