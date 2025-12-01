@@ -6,19 +6,17 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
+    
     public function up(): void
     {
         Schema::create('appointments', function (Blueprint $table) {
             $table->id();
             
             $table->foreignId('client_id')->constrained()->onDelete('cascade');
-            $table->foreignId('user_id')->constrained()->onDelete('cascade'); // admin who created it
+            $table->foreignId('user_id')->constrained()->onDelete('cascade'); 
             
-            $table->date('appointment_date');      // Date of the appointment
-            $table->time('start_time');            // Start time (matches controller)
+            $table->date('appointment_date');      
+            $table->time('start_time');           
             
             $table->enum('status', ['pending', 'confirmed', 'completed', 'cancelled'])->default('pending');
             
@@ -26,9 +24,6 @@ return new class extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('appointments');
