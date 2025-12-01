@@ -10,13 +10,13 @@ class NailTechController extends Controller
 {
     public function index()
     {
-        $nailtechs = NailTech::with('clients')->get(); // eager load clients
+        $nailtechs = NailTech::with('clients')->get();
         return view('nailtechs.index', compact('nailtechs'));
     }
 
     public function create()
     {
-        $clients = Client::all(); // send all clients to the create view
+        $clients = Client::all(); 
         return view('nailtechs.create', compact('clients'));
     }
 
@@ -32,7 +32,7 @@ class NailTechController extends Controller
 
         $nailtech = NailTech::create($request->only('name', 'speciality', 'hourly_rate'));
 
-        // Attach selected clients
+       
         if ($request->has('clients')) {
             $nailtech->clients()->sync($request->clients);
         }
