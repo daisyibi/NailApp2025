@@ -21,7 +21,7 @@ class ClientController extends Controller
             return redirect()->route('clients.index')->with('error', 'Unauthorized access.');
         }
 
-        $nailtechs = NailTech::all(); // for multi-select
+        $nailtechs = NailTech::all(); 
         return view('clients.create', compact('nailtechs'));
     }
 
@@ -61,7 +61,7 @@ class ClientController extends Controller
 
     public function show(Client $client)
     {
-        $client->load('nailtechs'); // eager load nail techs
+        $client->load('nailtechs'); 
         return view('clients.show', compact('client'));
     }
 
@@ -71,7 +71,7 @@ class ClientController extends Controller
             return redirect()->route('clients.index')->with('error', 'Unauthorized access.');
         }
 
-        $nailtechs = NailTech::all(); // for multi-select
+        $nailtechs = NailTech::all(); 
         $client->load('nailtechs');
         return view('clients.edit', compact('client', 'nailtechs'));
     }
